@@ -1636,6 +1636,7 @@ NAN_METHOD(GetParameter) {
   case GL_RENDERBUFFER_BINDING:
   case GL_TEXTURE_BINDING_2D:
   case GL_TEXTURE_BINDING_CUBE_MAP:
+  case GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS:
   {
     GLint params;
     ::glGetIntegerv(name, &params);
