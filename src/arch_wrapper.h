@@ -16,6 +16,8 @@
 //from GL/gl.h:
     #define GL_CLAMP				0x2900
     #define GL_CLAMP_TO_BORDER			0x812D
+    #define GL_BGR					0x80E0
+    #define GL_BGRA					0x80E1
 #else
     /*#if defined (__APPLE__) || defined(MACOSX)
       #include <OpenGL/gl3.h>
