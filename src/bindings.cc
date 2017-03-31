@@ -159,6 +159,7 @@ void init(Handle<Object> target)
   Nan::SetMethod(target, "getActiveAttrib", webgl::GetActiveAttrib);
   Nan::SetMethod(target, "getActiveUniform", webgl::GetActiveUniform);
   Nan::SetMethod(target, "getAttachedShaders", webgl::GetAttachedShaders);
+  Nan::SetMethod(target, "getShaderPrecisionFormat", webgl::GetShaderPrecisionFormat);
   Nan::SetMethod(target, "getParameter", webgl::GetParameter);
   Nan::SetMethod(target, "getBufferParameter", webgl::GetBufferParameter);
   Nan::SetMethod(target, "getFramebufferAttachmentParameter", webgl::GetFramebufferAttachmentParameter);

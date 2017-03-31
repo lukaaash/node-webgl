@@ -1654,6 +1654,24 @@ NAN_METHOD(GetParameter) {
   //info.GetReturnValue().Set(Nan::Undefined());
 }
 
+NAN_METHOD(GetShaderPrecisionFormat) {
+  Nan::HandleScope scope;
+
+  GLenum shaderType = info[0]->Int32Value();
+  GLenum precisionType = info[1]->Int32Value();
+  GLint range[2], precision;
+
+  ::glGetShaderPrecisionFormat(shaderType, precisionType, &range[0], &precision);
+
+  Local<Array> arr=Nan::New<Array>(3);
+  arr->Set(0, JS_INT(range[0]));
+  arr->Set(1, JS_INT(range[1]));
+  arr->Set(2, JS_INT(precision));
+  info.GetReturnValue().Set(arr);
+
+}
+
+
 NAN_METHOD(GetBufferParameter) {
   Nan::HandleScope scope;
 

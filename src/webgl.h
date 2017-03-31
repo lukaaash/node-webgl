@@ -145,6 +145,7 @@ NAN_METHOD(GetActiveAttrib);
 NAN_METHOD(GetActiveUniform);
 NAN_METHOD(GetAttachedShaders);
 NAN_METHOD(GetParameter);
+NAN_METHOD(GetShaderPrecisionFormat);
 NAN_METHOD(GetBufferParameter);
 NAN_METHOD(GetFramebufferAttachmentParameter);
 NAN_METHOD(GetProgramInfoLog);
