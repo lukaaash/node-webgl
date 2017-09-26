@@ -76,7 +76,7 @@ void init(Handle<Object> target)
   Nan::SetMethod(target, "createTexture", webgl::CreateTexture);
   Nan::SetMethod(target, "bindTexture", webgl::BindTexture);
   Nan::SetMethod(target, "texImage2D", webgl::TexImage2D);
-  Nan::SetMethod(target, "texImage2D_pivot24", webgl::TexImage2D_pivot24);
+  Nan::SetMethod(target, "texPivot24", webgl::TexPivot24);
   Nan::SetMethod(target, "texParameteri", webgl::TexParameteri);
   Nan::SetMethod(target, "texParameterf", webgl::TexParameterf);
   Nan::SetMethod(target, "clear", webgl::Clear);
@@ -155,7 +155,6 @@ void init(Handle<Object> target)
   Nan::SetMethod(target, "validateProgram", webgl::ValidateProgram);
 
   Nan::SetMethod(target, "texSubImage2D", webgl::TexSubImage2D);
-  Nan::SetMethod(target, "texSubImage2D_pivot24", webgl::TexSubImage2D_pivot24);
   Nan::SetMethod(target, "readPixels", webgl::ReadPixels);
   Nan::SetMethod(target, "getTexParameter", webgl::GetTexParameter);
   Nan::SetMethod(target, "getActiveAttrib", webgl::GetActiveAttrib);

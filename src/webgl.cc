@@ -43,8 +43,10 @@ static GLuint ToGLuint(const void* ptr) {
 
 //pivot 24x24 bits:
 //this offloads work from RPi GPU, which has limited texture lookup bandwidth
-void pivot24(void* pixels)
+int want_pivot24 = 0;
+void pivot24(GLsizei width, GLsizei height, void* pixels)
 {
+  printf("TODO: pivot24 %d x %d pixels\n", width, height);
 }
 
 template<typename Type>
@@ -659,27 +661,16 @@ NAN_METHOD(TexImage2D) {
   int type = info[7]->Int32Value();
   void *pixels=getImageData(info[8]);
 
+  if (want_pivot24) pivot24(width, height, pixels);
   glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
   info.GetReturnValue().Set(Nan::Undefined());
 }
 
-NAN_METHOD(TexImage2D_pivot24) {
+NAN_METHOD(TexPivot24) {
   Nan::HandleScope scope;
 
-  int target = info[0]->Int32Value();
-  int level = info[1]->Int32Value();
-  int internalformat = info[2]->Int32Value();
-  int width = info[3]->Int32Value();
-  int height = info[4]->Int32Value();
-  int border = info[5]->Int32Value();
-  int format = info[6]->Int32Value();
-  int type = info[7]->Int32Value();
-  void *pixels=getImageData(info[8]);
-
-  pivot24(pixels);
-  glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
-
+  want_pivot24 = info[0]->Int32Value();
   info.GetReturnValue().Set(Nan::Undefined());
 }
 
@@ -1444,25 +1435,7 @@ NAN_METHOD(TexSubImage2D) {
   GLenum type = info[7]->Int32Value();
   void *pixels=getImageData(info[8]);
 
-  glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
-
-  info.GetReturnValue().Set(Nan::Undefined());
-}
-
-NAN_METHOD(TexSubImage2D_pivot24) {
-  Nan::HandleScope scope;
-
-  GLenum target = info[0]->Int32Value();
-  GLint level = info[1]->Int32Value();
-  GLint xoffset = info[2]->Int32Value();
-  GLint yoffset = info[3]->Int32Value();
-  GLsizei width = info[4]->Int32Value();
-  GLsizei height = info[5]->Int32Value();
-  GLenum format = info[6]->Int32Value();
-  GLenum type = info[7]->Int32Value();
-  void *pixels=getImageData(info[8]);
-
-  pivot24(pixels);
+  if (want_pivot24) pivot24(width, height, pixels);
   glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
   info.GetReturnValue().Set(Nan::Undefined());
