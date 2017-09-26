@@ -62,6 +62,7 @@ NAN_METHOD(Enable);
 NAN_METHOD(CreateTexture);
 NAN_METHOD(BindTexture);
 NAN_METHOD(TexImage2D);
+NAN_METHOD(TexPivot24);
 NAN_METHOD(TexParameteri);
 NAN_METHOD(TexParameterf);
 NAN_METHOD(Clear);
