@@ -41,6 +41,14 @@ static GLuint ToGLuint(const void* ptr) {
   return static_cast<GLuint>(reinterpret_cast<size_t>(ptr));
 }
 
+//pivot 24x24 bits:
+//this offloads work from RPi GPU, which has limited texture lookup bandwidth
+int want_pivot24 = 0;
+void pivot24(GLsizei width, GLsizei height, void* pixels)
+{
+  printf("TODO: pivot24 %d x %d pixels\n", width, height);
+}
+
 template<typename Type>
 inline Type* getArrayData(Local<Value> arg, int* num = NULL) {
   Type *data=NULL;
@@ -552,6 +560,7 @@ NAN_METHOD(GetProgramParameter) {
   case GL_ATTACHED_SHADERS:
   case GL_ACTIVE_ATTRIBUTES:
   case GL_ACTIVE_UNIFORMS:
+  case GL_INFO_LOG_LENGTH:
     glGetProgramiv(program, pname, &value);
     info.GetReturnValue().Set(JS_FLOAT(static_cast<long>(value)));
     break;
@@ -652,11 +661,18 @@ NAN_METHOD(TexImage2D) {
   int type = info[7]->Int32Value();
   void *pixels=getImageData(info[8]);
 
+  if (want_pivot24) pivot24(width, height, pixels);
   glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
   info.GetReturnValue().Set(Nan::Undefined());
 }
 
+NAN_METHOD(TexPivot24) {
+  Nan::HandleScope scope;
+
+  want_pivot24 = info[0]->Int32Value();
+  info.GetReturnValue().Set(Nan::Undefined());
+}
 
 NAN_METHOD(TexParameteri) {
   Nan::HandleScope scope;
@@ -1419,6 +1435,7 @@ NAN_METHOD(TexSubImage2D) {
   GLenum type = info[7]->Int32Value();
   void *pixels=getImageData(info[8]);
 
+  if (want_pivot24) pivot24(width, height, pixels);
   glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
   info.GetReturnValue().Set(Nan::Undefined());
@@ -1635,6 +1652,7 @@ NAN_METHOD(GetParameter) {
   case GL_RENDERBUFFER_BINDING:
   case GL_TEXTURE_BINDING_2D:
   case GL_TEXTURE_BINDING_CUBE_MAP:
+  case GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS:
   {
     GLint params;
     ::glGetIntegerv(name, &params);
@@ -1651,6 +1669,24 @@ NAN_METHOD(GetParameter) {
 
   //info.GetReturnValue().Set(Nan::Undefined());
 }
+
+NAN_METHOD(GetShaderPrecisionFormat) {
+  Nan::HandleScope scope;
+
+  GLenum shaderType = info[0]->Int32Value();
+  GLenum precisionType = info[1]->Int32Value();
+  GLint range[2], precision;
+
+  ::glGetShaderPrecisionFormat(shaderType, precisionType, &range[0], &precision);
+
+  Local<Array> arr=Nan::New<Array>(3);
+  arr->Set(0, JS_INT(range[0]));
+  arr->Set(1, JS_INT(range[1]));
+  arr->Set(2, JS_INT(precision));
+  info.GetReturnValue().Set(arr);
+
+}
+
 
 NAN_METHOD(GetBufferParameter) {
   Nan::HandleScope scope;

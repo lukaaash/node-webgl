@@ -76,6 +76,7 @@ void init(Handle<Object> target)
   Nan::SetMethod(target, "createTexture", webgl::CreateTexture);
   Nan::SetMethod(target, "bindTexture", webgl::BindTexture);
   Nan::SetMethod(target, "texImage2D", webgl::TexImage2D);
+  Nan::SetMethod(target, "texPivot24", webgl::TexPivot24);
   Nan::SetMethod(target, "texParameteri", webgl::TexParameteri);
   Nan::SetMethod(target, "texParameterf", webgl::TexParameterf);
   Nan::SetMethod(target, "clear", webgl::Clear);
@@ -159,6 +160,7 @@ void init(Handle<Object> target)
   Nan::SetMethod(target, "getActiveAttrib", webgl::GetActiveAttrib);
   Nan::SetMethod(target, "getActiveUniform", webgl::GetActiveUniform);
   Nan::SetMethod(target, "getAttachedShaders", webgl::GetAttachedShaders);
+  Nan::SetMethod(target, "getShaderPrecisionFormat", webgl::GetShaderPrecisionFormat);
   Nan::SetMethod(target, "getParameter", webgl::GetParameter);
   Nan::SetMethod(target, "getBufferParameter", webgl::GetBufferParameter);
   Nan::SetMethod(target, "getFramebufferAttachmentParameter", webgl::GetFramebufferAttachmentParameter);
@@ -380,6 +382,8 @@ void init(Handle<Object> target)
   JS_GL_CONSTANT(ALPHA);
   JS_GL_CONSTANT(RGB);
   JS_GL_CONSTANT(RGBA);
+  JS_GL_CONSTANT(BGR);
+  JS_GL_CONSTANT(BGRA);
   JS_GL_CONSTANT(LUMINANCE);
   JS_GL_CONSTANT(LUMINANCE_ALPHA);
 
@@ -434,6 +438,10 @@ void init(Handle<Object> target)
   JS_GL_CONSTANT(INVERT);
   JS_GL_CONSTANT(INCR_WRAP);
   JS_GL_CONSTANT(DECR_WRAP);
+
+//add missing const for point clouds, sprites:
+  JS_GL_CONSTANT(PROGRAM_POINT_SIZE);
+  JS_GL_CONSTANT(POINT_SPRITE);
 
   /* StringName */
   JS_GL_CONSTANT(VENDOR);
@@ -507,11 +515,14 @@ void init(Handle<Object> target)
   JS_GL_CONSTANT(TEXTURE30);
   JS_GL_CONSTANT(TEXTURE31);
   JS_GL_CONSTANT(ACTIVE_TEXTURE);
+  JS_GL_CONSTANT(MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 
   /* TextureWrapMode */
-  JS_GL_CONSTANT(REPEAT);
+  JS_GL_CONSTANT(CLAMP);
+  JS_GL_CONSTANT(CLAMP_TO_BORDER);
   JS_GL_CONSTANT(CLAMP_TO_EDGE);
   JS_GL_CONSTANT(MIRRORED_REPEAT);
+  JS_GL_CONSTANT(REPEAT);
 
   /* Uniform Types */
   JS_GL_CONSTANT(FLOAT_VEC2);
